@@ -42,7 +42,7 @@ class BookController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Book created successfully',
-            'data' => $book
+            'data' => $this->transformBook($book)
         ], 201);
     }
 
@@ -106,16 +106,8 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(string $bookId)
     {
-        $bookId = $request->input('bookId');
-
-        if (!$bookId) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Book ID is required'
-            ], 400);
-        }
 
         $book = Book::find($bookId);
 
@@ -131,7 +123,7 @@ class BookController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Book deleted successfully'
-        ]);
+        ], 204);
     }
 
     /**

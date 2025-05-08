@@ -11,7 +11,7 @@ class UpdateBookRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class UpdateBookRequest extends FormRequest
         return [
             'title' => ['sometimes', 'required', 'string'],
             'author' => ['sometimes', 'required', 'string'],
-            'publication_year' => ['sometimes', 'required', 'integer', 'between:1500,' . now()->year],
+            'publicationYear' => ['sometimes', 'required', 'integer', 'between:1500,' . now()->year],
         ];
     }
 
@@ -33,8 +33,8 @@ class UpdateBookRequest extends FormRequest
         return [
             'title.required' => 'The book title is required.',
             'author.required' => 'The author name is required.',
-            'publication_year.required' => 'The publication year is required.',
-            'publication_year.between' => 'The publication year must be between 1500 and ' . now()->year . '.',
+            'publicationYear.required' => 'The publication year is required.',
+            'publicationYear.between' => 'The publication year must be between 1500 and ' . now()->year . '.',
         ];
     }
 }
