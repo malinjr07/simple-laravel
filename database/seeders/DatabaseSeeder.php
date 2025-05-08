@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         // Call BookSeeder for specific books
         $this->call(BookSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }
