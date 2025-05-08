@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use OpenApi\Annotations as OA;
 
 class UserAuthController extends Controller
 {
@@ -57,5 +58,12 @@ class UserAuthController extends Controller
             'user' => $user,
             'token' => $user->createToken('auth_token')->plainTextToken,
         ], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Logged out']);
     }
 }

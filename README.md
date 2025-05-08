@@ -7,6 +7,8 @@ This is a simple RESTful API built with Laravel 12.x to manage a list of books. 
 ## 🚀 Features
 
 -   Create, read, update, delete books
+-   User authentication with Laravel Sanctum
+-   File uploads with media storage
 -   Input validation using Form Requests
 -   SQLite for easy local setup
 -   Factory, Seeder, and Migration usage
@@ -16,13 +18,37 @@ This is a simple RESTful API built with Laravel 12.x to manage a list of books. 
 
 ## 📌 API Endpoints
 
-| Method | Endpoint          | Description             |
-| ------ | ----------------- | ----------------------- |
-| GET    | `/api/books`      | Get all books           |
-| GET    | `/api/books/{id}` | Get a book by ID        |
-| POST   | `/api/books`      | Create a new book       |
-| PUT    | `/api/books/{id}` | Update an existing book |
-| DELETE | `/api/books/{id}` | Delete a book           |
+### Book Endpoints (Protected by Bearer Token)
+
+| Method | Endpoint          | Description             | Auth Required |
+| ------ | ----------------- | ----------------------- | ------------- |
+| GET    | `/api/books`      | Get all books           | No           |
+| GET    | `/api/books/{id}` | Get a book by ID        | No           |
+| POST   | `/api/books`      | Create a new book       | No           |
+| PUT    | `/api/books/{id}` | Update an existing book | No           |
+| DELETE | `/api/books/{id}` | Delete a book           | No           |
+
+### Authentication Endpoints
+
+| Method | Endpoint       | Description           | Auth Required |
+| ------ | -------------- | --------------------- | ------------- |
+| POST   | `/api/sign-in` | Sign in and get token | No            |
+| POST   | `/api/sign-up` | Register a new user   | No            |
+| POST   | `/api/logout`  | Logout (revoke token) | Yes           |
+
+### User Management (Protected)
+
+| Method | Endpoint          | Description      | Auth Required |
+| ------ | ----------------- | ---------------- | ------------- |
+| GET    | `/api/users`      | Get all users    | Yes           |
+| GET    | `/api/users/{id}` | Get a user by ID | Yes           |
+| DELETE | `/api/users/{id}` | Delete a user    | Yes           |
+
+### Media Upload
+
+| Method | Endpoint      | Description          | Auth Required |
+| ------ | ------------- | -------------------- | ------------- |
+| POST   | `/api/upload` | Upload an image file | No            |
 
 ---
 
@@ -46,19 +72,13 @@ composer install
 ```bash
 cp .env.example .env
 php artisan key:generate
+
 ```
 
-Update the `.env` file to use SQLite:
+Update the .env file to use SQLite:
 
 ```env
 DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
-```
-
-Then create the SQLite file:
-
-```bash
-touch database/database.sqlite
 ```
 
 ### 4. Run Migrations and Seeders
@@ -67,17 +87,23 @@ touch database/database.sqlite
 php artisan migrate --seed
 ```
 
-This will create the `books` table and populate it with sample data (if seeders are set up).
+This will create the necessary tables and populate them with sample data.
 
-### 5. Serve the Application
+### 5. Create Storage Link for Media Uploads
+
+```bash
+php artisan storage:link
+```
+
+This command creates a symbolic link from `public/storage` to `storage/app/public`, allowing you to access uploaded files via the web.
+
+### 6. Start the Development Server
 
 ```bash
 php artisan serve
 ```
 
-Visit: [http://localhost:8000](http://localhost:8000)
-
----
+This will start the server at `http://localhost:8000`.
 
 ## 📒 API Documentation (Swagger)
 
@@ -89,21 +115,26 @@ After setting up the project:
     php artisan l5-swagger:generate
     ```
 
-2. Access the UI:
+    This command scans your annotated controllers and generates OpenAPI specifications.
+
+2. Access the Swagger UI:
 
     [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
 
-This interactive documentation shows all available endpoints, parameters, request/response structures, and validation rules.
+3. Updating Swagger Documentation:
 
----
+    Whenever you make changes to your API endpoints or annotations, regenerate the docs with:
 
-## 🧪 Running Tests
+    ```bash
+    php artisan l5-swagger:generate
+    ```
 
-```bash
-php artisan test
-```
+The Swagger UI provides interactive documentation where you can:
 
-This runs all Feature and Unit tests including CRUD test coverage for the `BookController`.
+-   Browse all available endpoints
+-   See required parameters and response structures
+-   Test endpoints directly from the browser
+-   Authorize with bearer tokens for testing protected endpoints
 
 ---
 
