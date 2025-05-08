@@ -18,6 +18,11 @@ Route::get('/', function () {
 
 
 Route::apiResource('books', BookController::class);
+
+
+
 Route::post('/sign-in', [UserAuthController::class, 'signIn'])->name('login');
 Route::post('/sign-up', [UserAuthController::class, 'signUp']);
-Route::post("/upload", [MediaController::class, "upload"]);
+
+Route::post("/upload-image", [MediaController::class, "uploadImage"]);
+Route::post("/upload-video", [MediaController::class, "uploadVideo"]);

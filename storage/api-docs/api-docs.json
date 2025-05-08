@@ -4,7 +4,7 @@
         "title": "Book Library API",
         "description": "API documentation for the Book Library",
         "contact": {
-            "email": "admin@example.com"
+            "email": "malinjr07@gmail.com"
         },
         "license": {
             "name": "MIT",
@@ -12,12 +12,6 @@
         },
         "version": "1.0.0"
     },
-    "servers": [
-        {
-            "url": "http://my-default-host.com",
-            "description": "API Server"
-        }
-    ],
     "paths": {
         "/api/books": {
             "get": {
@@ -180,6 +174,212 @@
                     },
                     "404": {
                         "description": "Book not found"
+                    }
+                }
+            }
+        },
+        "/api/upload": {
+            "post": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Upload an image file",
+                "description": "Upload and store an image file",
+                "operationId": "uploadImage",
+                "requestBody": {
+                    "description": "Image file to upload",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "File to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Image uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "example": "http://localhost:8000/storage/uploads/images/abcdefg.jpg"
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "example": "uploads/images/abcdefg.jpg"
+                                                },
+                                                "mime_type": {
+                                                    "type": "string",
+                                                    "example": "image/jpeg"
+                                                },
+                                                "extension": {
+                                                    "type": "string",
+                                                    "example": "jpg"
+                                                },
+                                                "disk": {
+                                                    "type": "string",
+                                                    "example": "local"
+                                                },
+                                                "size": {
+                                                    "type": "integer",
+                                                    "example": 12345
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "profile.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "No file was uploaded."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/upload-video": {
+            "post": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Upload a video file",
+                "description": "Upload and store a video file",
+                "operationId": "uploadVideo",
+                "requestBody": {
+                    "description": "Video file to upload",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "File to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Video uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "example": "http://localhost:8000/storage/uploads/videos/abcdefg.mp4"
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "example": "uploads/videos/abcdefg.mp4"
+                                                },
+                                                "mime_type": {
+                                                    "type": "string",
+                                                    "example": "video/mp4"
+                                                },
+                                                "extension": {
+                                                    "type": "string",
+                                                    "example": "mp4"
+                                                },
+                                                "disk": {
+                                                    "type": "string",
+                                                    "example": "local"
+                                                },
+                                                "size": {
+                                                    "type": "integer",
+                                                    "example": 5000000
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "tutorial.mp4"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Only video files are allowed."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -697,6 +897,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Media",
+            "description": "API Endpoints for media file uploads"
+        },
         {
             "name": "Authentication",
             "description": "API Endpoints for user authentication"
