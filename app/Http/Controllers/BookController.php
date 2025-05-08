@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Book;
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 
 class BookController extends Controller
 {
@@ -15,14 +17,7 @@ class BookController extends Controller
     {
         $books = Book::orderBy('book_updated_at', 'desc')->get();
         $transformedBooks = $books->map(function ($book) {
-            return [
-                'id' => $book->book_id,
-                'title' => $book->book_title,
-                'author' => $book->book_author,
-                'publicationYear' => $book->book_publication_year,
-                'created_at' => $book->book_created_at,
-                'updated_at' => $book->book_updated_at,
-            ];
+            return $this->transformBook($book);
         });
         return response()->json([
             'status' => 'success',
@@ -33,20 +28,8 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'publicationYear' => 'nullable|integer|min:1500|max:' . date('Y')
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
 
         $bookData = [
             'book_title' => $request->title,
@@ -77,25 +60,16 @@ class BookController extends Controller
             ], 404);
         }
 
-        $transformedBook = [
-            'id' => $book->book_id,
-            'title' => $book->book_title,
-            'author' => $book->book_author,
-            'publicationYear' => $book->book_publication_year,
-            'created_at' => $book->book_created_at,
-            'updated_at' => $book->book_updated_at,
-        ];
-
         return response()->json([
             'status' => 'success',
-            'data' => $transformedBook
+            'data' => $this->transformBook($book)
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateBookRequest $request, string $id)
     {
         $book = Book::find($id);
 
@@ -104,19 +78,6 @@ class BookController extends Controller
                 'status' => 'error',
                 'message' => 'Book not found'
             ], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'sometimes|required|string|max:255',
-            'author' => 'sometimes|required|string|max:255',
-            'publicationYear' => 'nullable|integer|min:1500|max:' . date('Y')
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
         }
 
         $bookData = [];
@@ -135,19 +96,10 @@ class BookController extends Controller
 
         $book->update($bookData);
 
-        $transformedBook = [
-            'id' => $book->book_id,
-            'title' => $book->book_title,
-            'author' => $book->book_author,
-            'publicationYear' => $book->book_publication_year,
-            'created_at' => $book->book_created_at,
-            'updated_at' => $book->book_updated_at,
-        ];
-
         return response()->json([
             'status' => 'success',
             'message' => 'Book updated successfully',
-            'data' => $transformedBook
+            'data' => $this->transformBook($book)
         ]);
     }
 
@@ -180,5 +132,20 @@ class BookController extends Controller
             'status' => 'success',
             'message' => 'Book deleted successfully'
         ]);
+    }
+
+    /**
+     * Transform book data for API response.
+     */
+    private function transformBook($book)
+    {
+        return [
+            'id' => $book->book_id,
+            'title' => $book->book_title,
+            'author' => $book->book_author,
+            'publicationYear' => $book->book_publication_year,
+            'created_at' => $book->book_created_at,
+            'updated_at' => $book->book_updated_at,
+        ];
     }
 }
