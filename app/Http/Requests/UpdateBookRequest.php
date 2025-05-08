@@ -1,9 +1,17 @@
 <?php
 
 namespace App\Http\Requests;
-
+use OpenApi\Annotations as OA;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="UpdateBookRequest",
+ *     @OA\Property(property="title", type="string", example="New Book"),
+ *     @OA\Property(property="author", type="string", example="Jordan Belfort"),
+ *     @OA\Property(property="publication_year", type="integer", example=2021)
+ * )
+ */
 class UpdateBookRequest extends FormRequest
 {
     /**
