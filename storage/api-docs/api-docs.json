@@ -1,10 +1,23 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Book API",
-        "description": "Simple CRUD API for managing books",
+        "title": "Book Library API",
+        "description": "API documentation for the Book Library",
+        "contact": {
+            "email": "admin@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "API Server"
+        }
+    ],
     "paths": {
         "/api/books": {
             "get": {
@@ -12,7 +25,7 @@
                     "Books"
                 ],
                 "summary": "Get list of books",
-                "operationId": "a9d13283dfab262e97af3c914d51b7a8",
+                "operationId": "f465243d8f27db2558997076a39712cd",
                 "responses": {
                     "200": {
                         "description": "Successful"
@@ -24,7 +37,7 @@
                     "Books"
                 ],
                 "summary": "Create a new book",
-                "operationId": "47047e95a700b3271b697e57d0965191",
+                "operationId": "a97a8ca8bd2b58e91d3ab66b20548a7f",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -70,7 +83,7 @@
                     "Books"
                 ],
                 "summary": "Get a single book by ID",
-                "operationId": "2fdd668eb661591758aff4c56ca9b66a",
+                "operationId": "8ad49dadc452ad67a975b42b9ea7f293",
                 "parameters": [
                     {
                         "name": "id",
@@ -96,7 +109,7 @@
                     "Books"
                 ],
                 "summary": "Update an existing book",
-                "operationId": "f5ca658c501a803d68655af0365e3802",
+                "operationId": "e6ca5b783ea058eed9c2d53d070975f4",
                 "parameters": [
                     {
                         "name": "id",
@@ -149,7 +162,7 @@
                     "Books"
                 ],
                 "summary": "Delete a book by ID",
-                "operationId": "1a9c26667c32b8ed5e5770d7a1cc9d5c",
+                "operationId": "baa9e8f3e013efb89e23ffe3068dfcac",
                 "parameters": [
                     {
                         "name": "id",
@@ -171,6 +184,295 @@
                 }
             }
         },
+        "/api/sign-in": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign in a user",
+                "description": "Authenticates a user and returns an access token",
+                "operationId": "signIn",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "emailAddress",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "emailAddress": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful authentication",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "user@example.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcdefghijklmnopqrstuvwxyz123456789"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error or invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The provided credentials are incorrect."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Invalid credentials."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sign-up": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register a new user",
+                "description": "Creates a new user account and returns an access token",
+                "operationId": "signUp",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "firstName",
+                                    "emailAddress",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "firstName": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "lastName": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "emailAddress": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User signed up successfully"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "user@example.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcdefghijklmnopqrstuvwxyz123456789"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "emailAddress": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email address has already been taken."
+                                                    }
+                                                },
+                                                "password": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The password confirmation does not match."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign out the authenticated user",
+                "description": "Revokes all access tokens for the authenticated user",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -178,7 +480,7 @@
                 ],
                 "summary": "Get all users",
                 "description": "Returns a list of all users",
-                "operationId": "c457726701591d1183b53aa71fc13441",
+                "operationId": "8a14ed69fb5e1f73f4bd54e7bddd5197",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -233,7 +535,7 @@
                 ],
                 "summary": "Get user by ID",
                 "description": "Returns a specific user by ID",
-                "operationId": "36a33ff774d5cba33c039dec2c3e0287",
+                "operationId": "4e265bb2b916299d36cd3268d3e24885",
                 "parameters": [
                     {
                         "name": "id",
@@ -297,7 +599,7 @@
                 ],
                 "summary": "Delete a user",
                 "description": "Deletes a user by ID",
-                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "operationId": "79dba56c87f4205ad32dc0e5ccec48e3",
                 "parameters": [
                     {
                         "name": "id",
@@ -395,6 +697,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Authentication",
+            "description": "API Endpoints for user authentication"
+        },
         {
             "name": "Users",
             "description": "API Endpoints for managing users"
