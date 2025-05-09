@@ -17,15 +17,15 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->decimal('price', 10, 2);
 
-            // Relationship with categories
-            /* $table->unsignedBigInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade'); */
+            // Relationship with Categories
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
             // Relationship with Media
-            $table->unsignedBigInteger('media_id')->nullable();
-            $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
+            $table->unsignedBigInteger('image_id')->nullable();
+            $table->foreign('image_id')->references('media_id')->on('media')->onDelete('cascade');
 
-            // Relationship with Media
+            // Relationship with Tags
             $table->unsignedBigInteger('tag_id')->nullable();
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
 
