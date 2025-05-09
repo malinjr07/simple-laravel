@@ -11,16 +11,17 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('media', function (Blueprint $table) {
-            $table->id();
+            $table->id('media_id');
             $table->string('url')->unique();
-            // $table->string('type')->default('image');
-            $table->string('name')->nullable();
+            $table->string('fileName')->nullable();
             $table->string('extension')->nullable();
             $table->string('mime_type')->nullable();
             $table->string('disk')->default('local');
             $table->string('path')->nullable();
             $table->integer('size')->nullable();
-            $table->timestamps();
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->timestamp('media_created_at')->nullable();
+            $table->timestamp('media_updated_at')->nullable();
         });
     }
 
