@@ -18,15 +18,22 @@ Route::get('/', function () {
     return response()->json(['message' => 'Book API is running!'], 200);
 });
 
-Route::prefix('auth')->middleware('api')->group(function () {
+Route::prefix('auth')->middleware(['auth:jwt'])->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
+});
+
+Route::prefix('auth')->middleware(['auth:jwt', 'jwt.refresh'])->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
 });
 
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:jwt'])->group(function () {
+    Route::apiResource('products', ProductController::class);
+});
+
+Route::middleware(['auth:oauth'])->group(function () {
     Route::apiResource('products', ProductController::class);
 });
 

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => "api",
+        'guard' => "jwt",
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
@@ -40,7 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'api' => [
+        'oauth' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
+        'jwt' => [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
