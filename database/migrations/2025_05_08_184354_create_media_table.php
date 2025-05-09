@@ -19,7 +19,11 @@ return new class extends Migration {
             $table->string('disk')->default('local');
             $table->string('path')->nullable();
             $table->integer('size')->nullable();
+            $table->boolean('is_primary')->default(false);
+            // Relationship with Products
             $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
             $table->timestamp('media_created_at')->nullable();
             $table->timestamp('media_updated_at')->nullable();
         });
