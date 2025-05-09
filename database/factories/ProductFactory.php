@@ -25,9 +25,9 @@ class ProductFactory extends Factory
             'price' => $this->faker->randomFloat(2, 10, 500),
             'sku' => $this->faker->unique()->bothify('??-####'),
             'stock' => $this->faker->numberBetween(0, 250),
-            'is_active' => $this->faker->boolean(80), // 80% active
-            'is_featured' => $this->faker->boolean(20), // 20% featured
-            'is_on_sale' => $this->faker->boolean(30), // 30% on sale
+            'is_active' => $this->faker->boolean(80),
+            'is_featured' => $this->faker->boolean(20),
+            'is_on_sale' => $this->faker->boolean(30),
             'sale_price' => function (array $attributes) {
                 return $attributes['is_on_sale'] ? $this->faker->randomFloat(2, 5, $attributes['price'] * 0.8) : null;
             },

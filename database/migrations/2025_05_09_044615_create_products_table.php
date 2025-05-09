@@ -21,10 +21,6 @@ return new class extends Migration {
             $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
-            // Relationship with Media
-            $table->unsignedBigInteger('image_id')->nullable();
-            $table->foreign('image_id')->references('media_id')->on('media')->onDelete('cascade');
-
             // Relationship with Tags
             $table->unsignedBigInteger('tag_id')->nullable();
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');

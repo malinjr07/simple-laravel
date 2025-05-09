@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
@@ -58,23 +57,25 @@ class Product extends Model
     ];
 
     /**
-     * Get the media associated with the product.
+     * The media associated with the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function media(): HasMany
+    public function media(): BelongsToMany
     {
-        return $this->hasMany(Media::class);
+        return $this->belongsToMany(Media::class, 'product_media', 'product_id', 'media_id')
+            ->withPivot('is_primary')
+            ->withTimestamps();
     }
 
     /**
-     * Get the primary image for the product.
+     * Get the primary media for the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \App\Models\Media|null
      */
-    public function primaryImage(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function primaryMedia(): ?Media
     {
-        return $this->hasOne(Media::class)->where('is_primary', true);
+        return $this->media()->wherePivot('is_primary', true)->first();
     }
 
     /**

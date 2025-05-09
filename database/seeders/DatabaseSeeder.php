@@ -19,49 +19,23 @@ class DatabaseSeeder extends Seeder
         Book::factory()->count(80)->create();
         User::factory()->count(15)->create();
 
-        // Create products first
+        // Create products
         $products = Product::factory()->count(40)->create();
 
-        // Count to track total media items
-        $totalMediaCount = 0;
+        // Create media
+        $mediaItems = Media::factory()->count(100)->create();
 
-        // Create media associated with products and set the image_id
+        // Associate media with products
         foreach ($products as $product) {
-            // Create 1-4 media for each product
-            $mediaCount = rand(1, 4);
-            $totalMediaCount += $mediaCount;
+            $associatedMedia = $mediaItems->random(rand(1, 5));
 
-            // First media is primary
-            $primaryMedia = Media::factory()
-                ->primary()
-                ->forProduct($product->id)
-                ->create();
-
-            // Update the product's image_id with the primary media's id
-            $product->update([
-                'image_id' => $primaryMedia->media_id
-            ]);
-
-            // Rest are not primary (if mediaCount > 1)
-            if ($mediaCount > 1) {
-                Media::factory()
-                    ->count($mediaCount - 1)
-                    ->forProduct($product->id)
-                    ->create();
+            foreach ($associatedMedia as $index => $media) {
+                $product->media()->attach($media->media_id, [
+                    'is_primary' => $index === 0,
+                ]);
             }
         }
 
-        // Calculate how many null product_id media to create (aim for ~5%)
-        $nullProductMedia = 22;
-
-        // Create small amount of media not associated with products
-        Media::factory()->count($nullProductMedia)->create();
-
-        $this->command->info('Created: ' . $totalMediaCount . ' product media and ' .
-            $nullProductMedia . ' unassociated media');
-        $this->command->info('Total media: ' . ($totalMediaCount + $nullProductMedia));
-        $this->command->info('Percentage with null product_id: ' .
-            round(($nullProductMedia / ($totalMediaCount + $nullProductMedia)) * 100, 2) . '%');
-        $this->command->info('All products have an image_id set to their primary media');
+        $this->command->info('Database seeding completed successfully.');
     }
 }

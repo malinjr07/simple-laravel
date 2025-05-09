@@ -38,7 +38,6 @@ class MediaFactory extends Factory
             'path' => $path,
             'size' => $this->faker->numberBetween(100000, 999999),
             'is_primary' => $this->faker->boolean(20), // 20% chance of being primary
-            'product_id' => null,
             'media_created_at' => now(),
             'media_updated_at' => now(),
         ];
@@ -54,21 +53,6 @@ class MediaFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'is_primary' => true,
-            ];
-        });
-    }
-
-    /**
-     * Configure the model factory to associate with a product.
-     *
-     * @param int $productId
-     * @return $this
-     */
-    public function forProduct($productId)
-    {
-        return $this->state(function (array $attributes) use ($productId) {
-            return [
-                'product_id' => $productId,
             ];
         });
     }
