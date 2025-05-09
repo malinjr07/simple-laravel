@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Book;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,8 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Call BookSeeder for specific books
-        $this->call(BookSeeder::class);
-        $this->call(UserSeeder::class);
+        Book::factory()->count(80)->create();
+        User::factory()->count(15)->create();
     }
 }

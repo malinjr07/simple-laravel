@@ -13,13 +13,10 @@ class BookController extends Controller
 
     public function index()
     {
-        $books = Book::orderBy('book_updated_at', 'desc')->get();
-        $transformedBooks = $books->map(function ($book) {
-            return $this->transformBook($book);
-        });
+        $books = Book::orderBy('updated_at', 'desc')->get();
         return response()->json([
             'status' => 'success',
-            'data' => $transformedBooks
+            'data' => $books
         ]);
     }
 
@@ -27,9 +24,9 @@ class BookController extends Controller
     {
 
         $bookData = [
-            'book_title' => $request->title,
-            'book_author' => $request->author,
-            'book_publication_year' => $request->publicationYear,
+            'title' => $request->title,
+            'author' => $request->author,
+            'publication_year' => $request->publication_year,
         ];
 
         $book = Book::create($bookData);
@@ -37,7 +34,7 @@ class BookController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Book created successfully',
-            'data' => $this->transformBook($book)
+            'data' => $book
         ], 201);
     }
 
@@ -54,7 +51,7 @@ class BookController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $this->transformBook($book)
+            'data' => $book
         ]);
     }
 
@@ -72,15 +69,15 @@ class BookController extends Controller
         $bookData = [];
 
         if ($request->has('title')) {
-            $bookData['book_title'] = $request->title;
+            $bookData['title'] = $request->title;
         }
 
         if ($request->has('author')) {
-            $bookData['book_author'] = $request->author;
+            $bookData['author'] = $request->author;
         }
 
         if ($request->has('publicationYear')) {
-            $bookData['book_publication_year'] = $request->publicationYear;
+            $bookData['publication_year'] = $request->publication_year;
         }
 
         $book->update($bookData);
@@ -88,14 +85,14 @@ class BookController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Book updated successfully',
-            'data' => $this->transformBook($book)
+            'data' => $book
         ]);
     }
 
-    public function destroy(string $bookId)
+    public function destroy(string $id)
     {
 
-        $book = Book::find($bookId);
+        $book = Book::find($id);
 
         if (!$book) {
             return response()->json([
@@ -110,20 +107,5 @@ class BookController extends Controller
             'status' => 'success',
             'message' => 'Book deleted successfully'
         ], 204);
-    }
-
-    /**
-     * Transform book data for API response.
-     */
-    private function transformBook($book)
-    {
-        return [
-            'id' => $book->book_id,
-            'title' => $book->book_title,
-            'author' => $book->book_author,
-            'publicationYear' => $book->book_publication_year,
-            'created_at' => $book->book_created_at,
-            'updated_at' => $book->book_updated_at,
-        ];
     }
 }

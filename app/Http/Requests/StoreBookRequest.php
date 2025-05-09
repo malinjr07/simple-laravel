@@ -33,7 +33,7 @@ class StoreBookRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'author' => ['required', 'string'],
-            'publicationYear' => ['required', 'integer', 'between:1500,' . now()->year],
+            'publication_year' => ['required', 'integer', 'between:1500,' . now()->year],
         ];
     }
 
@@ -42,8 +42,8 @@ class StoreBookRequest extends FormRequest
         return [
             'title.required' => 'The book title is required.',
             'author.required' => 'The author name is required.',
-            'publicationYear.required' => 'The publication year is required.',
-            'publicationYear.between' => 'The publication year must be between 1500 and ' . now()->year . '.',
+            'publication_year.required' => 'The publication year is required.',
+            'publication_year.between' => 'The publication year must be between 1500 and ' . now()->year . '.',
         ];
     }
 }

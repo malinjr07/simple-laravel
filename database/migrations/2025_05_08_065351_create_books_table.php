@@ -11,12 +11,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('books', function (Blueprint $table) {
-            $table->id('book_id');
-            $table->string('book_title');
-            $table->string('book_author');
-            $table->date('book_publication_year')->nullable();
-            $table->timestamp('book_created_at')->nullable();
-            $table->timestamp('book_updated_at')->nullable();
+            $table->id();
+            $table->string('title');
+            $table->string('author');
+            $table->date('publication_year')->nullable();
+            $table->timestamps();
         });
     }
 
