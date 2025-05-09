@@ -1,3 +1,4 @@
+.php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -12,13 +13,14 @@ return new class extends Migration {
     {
         Schema::create('product_media', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('media_id');
             $table->boolean('is_primary')->default(false);
             $table->timestamps();
 
             // Foreign keys
+            $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+            $table->unsignedBigInteger('media_id');
             $table->foreign('media_id')->references('media_id')->on('media')->onDelete('cascade');
 
             // Unique constraint to prevent duplicate associations
